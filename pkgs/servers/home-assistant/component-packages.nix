@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.6.3";
+  version = "2024.6.4";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -112,9 +112,10 @@
     ];
     "aladdin_connect" = ps: with ps; [
       fnv-hash-fast
+      genie-partner-sdk
       psutil-home-assistant
       sqlalchemy
-    ]; # missing inputs: genie-partner-sdk
+    ];
     "alarm_control_panel" = ps: with ps; [
     ];
     "alarmdecoder" = ps: with ps; [
@@ -2892,6 +2893,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      motionblindsble
       mutagen
       psutil-home-assistant
       pyserial
@@ -2899,7 +2901,7 @@
       sqlalchemy
       webrtc-noise-gain
       zeroconf
-    ]; # missing inputs: motionblindsble
+    ];
     "motioneye" = ps: with ps; [
       motioneye-client
     ];
@@ -4092,7 +4094,7 @@
       ha-ffmpeg
     ];
     "slack" = ps: with ps; [
-      slackclient
+      slack-sdk
     ];
     "sleepiq" = ps: with ps; [
       asyncsleepiq
@@ -5251,6 +5253,7 @@
     "airvisual_pro"
     "airzone"
     "airzone_cloud"
+    "aladdin_connect"
     "alarm_control_panel"
     "alarmdecoder"
     "alert"
@@ -5661,6 +5664,7 @@
     "moon"
     "mopeka"
     "motion_blinds"
+    "motionblinds_ble"
     "motioneye"
     "motionmount"
     "mqtt"

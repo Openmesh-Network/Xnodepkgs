@@ -1,6 +1,7 @@
-{ lowPrio, newScope, pkgs, lib, stdenv, cmake, ninja
+{ lowPrio, newScope, pkgs, lib, stdenv
 , preLibcCrossHeaders
-, libxml2, python3, fetchFromGitHub, substituteAll, overrideCC, wrapCCWith, wrapBintoolsWith
+, substitute, substituteAll, fetchFromGitHub, fetchpatch
+, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
@@ -19,9 +20,9 @@
 # LLVM release information; specify one of these but not both:
 , gitRelease ? {
     version = "19.0.0-git";
-    rev = "78ee473784e5ef6f0b19ce4cb111fb6e4d23c6b2";
-    rev-version = "19.0.0-unstable-2024-06-12";
-    sha256 = "sha256-oLVMwWjo6Nt8ZsTnDTfoiM5U0+1lVIc1NO+4qBNYlzs=";
+    rev = "9b9405621bcc55b74d2177c960c21f62cc95e6fd";
+    rev-version = "19.0.0-unstable-2024-06-30";
+    sha256 = "sha256-Tlk+caav7e7H6bha8YQyOl+x2iNk9iH7xKpHQkWQyJ4=";
 }
   # i.e.:
   # {
@@ -44,6 +45,10 @@
 # to you to make sure that the LLVM repo given matches the release configuration
 # specified.
 , monorepoSrc ? null
+# Allows passthrough to packages via newScope. This makes it possible to
+# do `(llvmPackages.override { <someLlvmDependency> = bar; }).clang` and get
+# an llvmPackages whose packages are overridden in an internally consistent way.
+, ...
 }@args:
 
 assert
@@ -176,6 +181,9 @@ in let
       python3 = pkgs.python3;  # don't use python-boot
     });
 
+    # Wrapper for standalone command line utilities
+    clang-tools = callPackage ../common/clang-tools { };
+
     # pick clang appropriate for package set we are targeting
     clang =
       /**/ if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM
@@ -260,7 +268,7 @@ in let
       bintools = bintools';
       extraPackages = [
         targetLlvmLibraries.compiler-rt
-      ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
+      ] ++ lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD) [
         targetLlvmLibraries.libunwind
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
@@ -269,12 +277,12 @@ in let
           "-Wno-unused-command-line-argument"
           "-B${targetLlvmLibraries.compiler-rt}/lib"
         ]
-        ++ lib.optional (!stdenv.targetPlatform.isWasm) "--unwindlib=libunwind"
+        ++ lib.optional (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD) "--unwindlib=libunwind"
         ++ lib.optional
-          (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false)
+          (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && stdenv.targetPlatform.useLLVM or false)
           "-lunwind"
         ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
-      nixSupport.cc-ldflags = lib.optionals (!stdenv.targetPlatform.isWasm) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
+      nixSupport.cc-ldflags = lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
     };
 
     clangNoLibcxx = wrapCCWith rec {

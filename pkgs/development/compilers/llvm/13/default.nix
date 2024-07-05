@@ -1,7 +1,7 @@
-{ lowPrio, newScope, pkgs, lib, stdenv, cmake
+{ lowPrio, newScope, pkgs, lib, stdenv
 , preLibcCrossHeaders
-, fetchpatch
-, libxml2, python3, isl, fetchFromGitHub, substitute, substituteAll, overrideCC, wrapCCWith, wrapBintoolsWith
+, substitute, substituteAll, fetchFromGitHub, fetchpatch
+, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
@@ -40,7 +40,10 @@
 # to you to make sure that the LLVM repo given matches the release configuration
 # specified.
 , monorepoSrc ? null
-
+# Allows passthrough to packages via newScope. This makes it possible to
+# do `(llvmPackages.override { <someLlvmDependency> = bar; }).clang` and get
+# an llvmPackages whose packages are overridden in an internally consistent way.
+, ...
 }@args:
 
 assert
@@ -170,6 +173,9 @@ in let
     #   enableManpages = true;
     #   python3 = pkgs.python3;  # don't use python-boot
     # });
+
+    # Wrapper for standalone command line utilities
+    clang-tools = callPackage ../common/clang-tools { };
 
     # pick clang appropriate for package set we are targeting
     clang =
@@ -388,14 +394,14 @@ in let
       patches = [
         (substitute {
           src = ../common/libcxxabi/wasm.patch;
-          replacements = [
+          substitutions = [
             "--replace-fail" "/cmake/" "/llvm/cmake/"
           ];
         })
       ] ++ lib.optionals stdenv.hostPlatform.isMusl [
         (substitute {
           src = ../common/libcxx/libcxx-0001-musl-hacks.patch;
-          replacements = [
+          substitutions = [
             "--replace-fail" "/include/" "/libcxx/include/"
           ];
         })
