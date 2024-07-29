@@ -2,14 +2,14 @@
 
 pkgs.python3Packages.buildPythonPackage rec {
   pname = "xnode-admin";
-  version = "0.0.4";
+  version = "0.0.6";
   format = "pyproject";
 
   src = pkgs.fetchFromGitHub {
     owner = "Openmesh-Network";
     repo = pname;
-    rev = "ef36685eb1f40644e044a70755728f0a25b5f45f";
-    sha256 = "1vq390nk0lkhsnmd4rm88xx63v7q2xn5znvyryr20yl66m46gxsp";
+    rev = "a1b2e38e8fc07935dc5ade00cf3106c3f9c6bf47";
+    sha256 = "0638h990vb66jfdxxbrkrdr8shf1dg204yb1yrxbgaznrspfjj05";
   };
 
   nativeBuildInputs = [
