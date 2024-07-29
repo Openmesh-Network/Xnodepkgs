@@ -2,7 +2,7 @@
 
 pkgs.python3Packages.buildPythonPackage rec {
   pname = "xnode-admin";
-  version = "0.0.13";
+  version = "0.0.14";
   format = "pyproject";
 
   src = pkgs.fetchFromGitHub {
