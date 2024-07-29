@@ -41,8 +41,8 @@ in {
     environment.systemPackages = [ cfg.package ];
 
     environment.variables = {
-      PYTHONUNBUFFERED = "1"
-    }
+      PYTHONUNBUFFERED = "1";
+    };
 
     systemd.services.openmesh-xnode-admin = {
       description = "Openmesh Xnode Administration and Configuration Subsystem Daemon";
