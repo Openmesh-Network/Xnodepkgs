@@ -5,32 +5,17 @@
 , makeWrapper
 , nixosTests
 }:
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      django = super.django_3;
-    };
-  };
-in
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "seahub";
-  version = "10.0.1";
+  version = "11.0.10";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seahub";
-    rev = "e8c02236c0eaca6dde009872745f089da4b77e6e"; # using a fixed revision because upstream may re-tag releases :/
-    sha256 = "sha256-7JXWKEFqCsC+ZByhvyP8AmDpajT3hpgyYDNUqc3wXyg=";
+    rev = "79bae3cb0942a757c7edee0961198cc08c8d7979"; # using a fixed revision because upstream may re-tag releases :/
+    sha256 = "1s61gxlb48x3aw6xwmvkx57jl8nbgij222zp5797jmniv83dra86";
   };
-
-  patches = [
-    (fetchpatch {
-      # PIL update fix
-      url = "https://patch-diff.githubusercontent.com/raw/haiwen/seahub/pull/5570.patch";
-      sha256 = "sha256-7V2aRlacJ7Qhdi9k4Bs+t/Emx+EAM/NNCI+K40bMwLA=";
-    })
-  ];
 
   dontBuild = true;
 
@@ -40,7 +25,7 @@ python.pkgs.buildPythonApplication rec {
     makeWrapper
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     django
     future
     django-compressor
@@ -74,8 +59,8 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   passthru = {
-    inherit python;
-    pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
+    inherit python3;
+    pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
     tests = {
       inherit (nixosTests) seafile;
     };
