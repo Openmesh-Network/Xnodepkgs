@@ -24,7 +24,6 @@ python3Packages.buildPythonPackage rec {
     sphinx-rtd-theme
     recommonmark
     sphinxcontrib-images
-    python-ldap
   ];
 
   checkInputs = with python3Packages; [

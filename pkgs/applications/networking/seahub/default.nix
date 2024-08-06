@@ -51,6 +51,7 @@ python3.pkgs.buildPythonApplication rec {
     markdown
     bleach
     djangosaml2
+    python-ldap
   ];
 
   installPhase = ''
