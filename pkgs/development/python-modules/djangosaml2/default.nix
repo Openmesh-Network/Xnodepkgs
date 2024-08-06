@@ -7,7 +7,7 @@
   python,
   python3Packages,
   python312Packages,
-  sphinxcontrib_images
+  sphinxcontrib-images
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -23,7 +23,7 @@ python3Packages.buildPythonPackage rec {
   nativeBuildInputs = with python3Packages; [
     sphinx-rtd-theme
     recommonmark
-    sphinxcontrib_images
+    sphinxcontrib-images
   ];
 
   checkInputs = with python3Packages; [
@@ -47,7 +47,7 @@ python3Packages.buildPythonPackage rec {
 
       nativeBuildInputs = with python3Packages; [
         sphinx-rtd-theme
-        sphinxcontrib_images
+        sphinxcontrib-images
         recommonmark
       ];
 
