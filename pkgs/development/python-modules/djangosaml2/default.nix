@@ -49,6 +49,7 @@ python3Packages.buildPythonPackage rec {
         sphinx-rtd-theme
         sphinxcontrib-images
         recommonmark
+        python-ldap
       ];
 
       preBuild = ''
