@@ -50,6 +50,7 @@ python3.pkgs.buildPythonApplication rec {
     gunicorn
     markdown
     bleach
+    djangosaml2
   ];
 
   installPhase = ''
