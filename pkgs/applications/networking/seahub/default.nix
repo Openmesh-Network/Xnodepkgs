@@ -52,6 +52,7 @@ python3.pkgs.buildPythonApplication rec {
     bleach
     djangosaml2
     python-ldap
+    pysaml2
   ];
 
   installPhase = ''
