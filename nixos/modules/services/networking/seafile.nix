@@ -256,7 +256,7 @@ in
             LogsDirectory = "seafile";
             ConfigurationDirectory = "seafile";
             ExecStart = ''
-              ${pkgs.seahub.python.pkgs.gunicorn}/bin/gunicorn seahub.wsgi:application \
+              ${pkgs.seahub.python3.pkgs.gunicorn}/bin/gunicorn seahub.wsgi:application \
               --name seahub \
               --workers ${toString cfg.workers} \
               --log-level=info \
@@ -273,7 +273,7 @@ in
               ln -sf $m ${seahubDir}/media/
             done
             if [ ! -e "${seafRoot}/.seahubSecret" ]; then
-                ${pkgs.seahub.python}/bin/python ${pkgs.seahub}/tools/secret_key_generator.py > ${seafRoot}/.seahubSecret
+                ${pkgs.seahub.python3}/bin/python ${pkgs.seahub}/tools/secret_key_generator.py > ${seafRoot}/.seahubSecret
                 chmod 400 ${seafRoot}/.seahubSecret
             fi
             if [ ! -f "${seafRoot}/seahub-setup" ]; then
