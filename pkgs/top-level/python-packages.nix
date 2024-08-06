@@ -3401,6 +3401,8 @@ self: super: with self; {
 
   django-reversion = callPackage ../development/python-modules/django-reversion { };
 
+  djangosaml2 = callPackage ..development/python-modules/djangosaml2 { };
+
   django-sekizai = callPackage ../development/python-modules/django-sekizai { };
 
   django-sesame = callPackage ../development/python-modules/django-sesame { };
@@ -14421,6 +14423,8 @@ self: super: with self; {
 
   spinners = callPackage ../development/python-modules/spinners { };
 
+  sphinx_3_5_4 = callPackage ../development/python-modules/sphinx_3_5_4 { };
+
   sphinx-automodapi = callPackage ../development/python-modules/sphinx-automodapi {
     graphviz = pkgs.graphviz;
   };
@@ -14492,6 +14496,10 @@ self: super: with self; {
   sphinxcontrib-htmlhelp = callPackage ../development/python-modules/sphinxcontrib-htmlhelp { };
 
   sphinxcontrib-httpdomain = callPackage ../development/python-modules/sphinxcontrib-httpdomain { };
+
+  sphinxcontrib-images = callPackage ../development/python-modules/sphinxcontrib-images { 
+    sphinx = sphinx_3_5_4;
+  };
 
   sphinxcontrib-jquery = callPackage ../development/python-modules/sphinxcontrib-jquery { };
 
