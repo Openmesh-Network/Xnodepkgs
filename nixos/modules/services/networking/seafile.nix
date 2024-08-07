@@ -283,7 +283,7 @@ in
                 # init database
                 ${pkgs.seahub}/manage.py migrate
                 # create admin account
-                ${pkgs.expect}/bin/expect -c 'spawn ${pkgs.seahub}/manage.py createsuperuser --email=${cfg.adminEmail}; expect "Password: "; send "${cfg.initialAdminPassword}\r"; expect "Password (again): "; send "${cfg.initialAdminPassword}\r"; expect "Superuser created successfully."'
+                ${pkgs.seahub}/manage.py createsuperuser --no-input --username admin --email ${cfg.adminEmail} --password ${cfg.initialAdminPassword}
                 echo "${pkgs.seahub.version}-sqlite" > "${seafRoot}/seahub-setup"
             fi
             if [ $(cat "${seafRoot}/seahub-setup" | cut -d"-" -f1) != "${pkgs.seahub.version}" ]; then
