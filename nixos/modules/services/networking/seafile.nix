@@ -283,7 +283,7 @@ in
                 # init database
                 ${pkgs.seahub}/manage.py migrate
                 # create admin account
-                ${pkgs.seahub}/manage.py createsuperuser --no-input --username admin --email ${cfg.adminEmail} --password ${cfg.initialAdminPassword}
+                ${pkgs.seahub}/manage.py createsuperuser --no-input --username admin --email=${cfg.adminEmail} --password=${cfg.initialAdminPassword}
                 echo "${pkgs.seahub.version}-sqlite" > "${seafRoot}/seahub-setup"
             fi
             if [ $(cat "${seafRoot}/seahub-setup" | cut -d"-" -f1) != "${pkgs.seahub.version}" ]; then
