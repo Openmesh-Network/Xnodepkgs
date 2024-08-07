@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    django
+    django_4
     future
     django-compressor
     django-statici18n

@@ -1,3 +1,14 @@
+# XnodePkgs
+
+For testing a branch on Xnode, here are the commands for channel updates.
+```
+nix-channel --remove nixos
+nix-channel --add 'https://github.com/Openmesh-Network/Xnodepkgs/archive/<branch>.tar.gz' nixos
+nix-channel --update -vvv
+rm -rf /root/.cache/nix
+```
+Then you can rebuild to update your packages.
+
 <p align="center">
   <a href="https://nixos.org">
     <picture>
