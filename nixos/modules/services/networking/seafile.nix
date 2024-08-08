@@ -307,6 +307,12 @@ in
 
           locations."/" = {
             proxyPass = "http://unix:/run/seahub/gunicorn.sock";
+            proxySetHeader = [
+            "Host \$host"
+            "X-Real-IP \$remote_addr"
+            "X-Forwarded-For \$proxy_add_x_forwarded_for"
+            "X-Forwarded-Proto \$scheme"
+            ];
           };
 
           locations."${cfg.ccnetSettings.General.SERVICE_URL}/seafhttp" = {
