@@ -36,7 +36,7 @@ in
 {
   ###### Reverse proxy config
 
-  services.nginx = {
+  options.services.nginx = {
     enable = true;
     recommendedGzipSettings = true;
 
