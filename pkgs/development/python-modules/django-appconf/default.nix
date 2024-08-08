@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  django,
+  django_4,
   six,
   python,
 }:
