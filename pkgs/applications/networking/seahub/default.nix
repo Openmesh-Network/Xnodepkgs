@@ -53,6 +53,7 @@ python3.pkgs.buildPythonApplication rec {
     djangosaml2
     python-ldap
     pysaml2
+    pyopenssl
   ];
 
   installPhase = ''
