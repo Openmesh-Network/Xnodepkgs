@@ -307,6 +307,7 @@ in
 
           locations."/" = {
             proxyPass = "http://unix:/run/seahub/gunicorn.sock";
+          };
 
           locations."${cfg.ccnetSettings.General.SERVICE_URL}/seafhttp" = {
             proxyPass = "http://127.0.0.1:8082";
