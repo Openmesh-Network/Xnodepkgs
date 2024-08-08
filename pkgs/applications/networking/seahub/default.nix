@@ -6,7 +6,11 @@
 , nixosTests
 }:
 let
-  python = python3;
+  python = python3.override {
+    packageOverrides = self: super: {
+      django = super.django_3;
+    };
+  };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "seahub";

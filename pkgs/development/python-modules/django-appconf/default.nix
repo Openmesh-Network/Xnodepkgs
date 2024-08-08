@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-nS4Hwp/NYg1XGvZO1tiE9mzJA7WFifyvgAjyp3YpqS4=";
   };
 
-  propagatedBuildInputs = [ django ];
+  propagatedBuildInputs = [ django_4 ];
 
   preCheck = ''
     # prove we're running tests against installed package, not build dir
