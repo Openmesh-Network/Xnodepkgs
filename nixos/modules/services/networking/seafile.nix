@@ -301,25 +301,12 @@ in
 
       virtualHosts = {
         "${cfg.ccnetSettings.General.SERVICE_URL}" = {
-          forceSSL = true;
-          enableACME = true;
-          webroot = "${seafRoot}/nginx/html";
+          #forceSSL = true;
+          #enableACME = true;
+          listen = [ { addr = "0.0.0.0"; port = 8000; } ];
 
           locations."/" = {
             proxyPass = "http://unix:/run/seahub/gunicorn.sock";
-            proxyWebsockets = true;
-            extraConfig = ''
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-              proxy_set_header X-Forwarded-Host $host;
-              proxy_set_header X-Forwarded-Proto $scheme;
-              proxy_connect_timeout  36000s;
-              proxy_send_timeout  36000s;
-              proxy_read_timeout  36000s;
-              send_timeout  36000s;
-            '';
-          };
 
           locations."${cfg.ccnetSettings.General.SERVICE_URL}/seafhttp" = {
             proxyPass = "http://127.0.0.1:8082";
