@@ -24,6 +24,9 @@ python3Packages.buildPythonPackage rec {
     sphinx-rtd-theme
     recommonmark
     sphinxcontrib-images
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
     pyopenssl
   ];
 
