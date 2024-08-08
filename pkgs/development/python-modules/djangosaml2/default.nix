@@ -24,6 +24,7 @@ python3Packages.buildPythonPackage rec {
     sphinx-rtd-theme
     recommonmark
     sphinxcontrib-images
+    pyopenssl
   ];
 
   checkInputs = with python3Packages; [
