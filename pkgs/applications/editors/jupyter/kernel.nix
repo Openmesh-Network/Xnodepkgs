@@ -4,7 +4,7 @@ let
 
   default = {
     python3 = let
-      env = pkgs.python3.withPackages (pythonPackages: with pythonPackages; [
+      env = python3.withPackages (pythonPackages: with pythonPackages; [
         # Provide standard data science tools by default
         ipykernel
         numpy
