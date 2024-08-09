@@ -124,29 +124,7 @@ in {
         inherit lib pkgs;
       })));
 
-      default = {
-        python3 = let
-          env = pkgs.python3.withPackages (pythonPackages: with pythonPackages; [
-            ipykernel
-            numpy
-            pandas
-            matplotlib
-            scikit-learn
-          ]);
-        in {
-          displayName = "Python 3";
-          argv = [
-            "${env.interpreter}"
-            "-m"
-            "ipykernel_launcher"
-            "-f"
-            "{connection_file}"
-          ];
-          language = "python";
-          logo32 = lib.mkIf (env.sitePackages != null) (builtins.toPath "/${env.sitePackages}/ipykernel/resources/logo-32x32.png");
-          logo64 = lib.mkIf (env.sitePackages != null) (builtins.toPath "/${env.sitePackages}/ipykernel/resources/logo-64x64.png");
-        };
-      };
+      default = null;
       example = literalExpression ''
         {
           python3 = let
