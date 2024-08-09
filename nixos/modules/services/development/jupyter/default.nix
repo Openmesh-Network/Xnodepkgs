@@ -37,7 +37,7 @@ in {
     # NOTE: We don't use top-level jupyter because we don't
     # want to pass in JUPYTER_PATH but use .environment instead,
     # saving a rebuild.
-    package = mkPackageOption pkgs [ "python3" "pkgs" "notebook" ] { };
+    package = mkPackageOption pkgs [ "python3" "pkgs" "notebook" "jupyterlab" ] { };
 
     command = mkOption {
       type = types.str;
@@ -124,7 +124,29 @@ in {
         inherit lib pkgs;
       })));
 
-      default = null;
+      default = {
+        python3 = let
+          env = pkgs.python3.withPackages (pythonPackages: with pythonPackages; [
+            ipykernel
+            numpy
+            pandas
+            matplotlib
+            scikit-learn
+          ]);
+        in {
+          displayName = "Python 3";
+          argv = [
+            "${env.interpreter}"
+            "-m"
+            "ipykernel_launcher"
+            "-f"
+            "{connection_file}"
+          ];
+          language = "python";
+          logo32 = lib.mkIf (env.sitePackages != null) (builtins.toPath "/${env.sitePackages}/ipykernel/resources/logo-32x32.png");
+          logo64 = lib.mkIf (env.sitePackages != null) (builtins.toPath "/${env.sitePackages}/ipykernel/resources/logo-64x64.png");
+        };
+      };
       example = literalExpression ''
         {
           python3 = let
