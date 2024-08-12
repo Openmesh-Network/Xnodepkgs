@@ -11,11 +11,11 @@ version = "v0.0.0-0xnodepkgs0";
 src = pkgs.fetchFromGitHub {
   owner = "Openmesh-Network";
   repo = name;
-  rev = "161b76f2ac140a414e230513aedba9d29cbb4a20";
-  sha256 = "sha256-CveaUIvkyrbSFuRP78k9fk1uSgUvf6SlbXvm1VlPIF4=";
+  rev = "a0aca399f3ca0791cbf109bd05e5a1af5bb39ab5";
+  sha256 = "0a7bn703dsby4l4fprsy0a73jzf3cbi2iskrxjcj62gii92x6f8q";
 };
 
-inputs = with pkgs; [ jq curl gnugrep ];
+inputs = with pkgs; [ jq curl gnugrep gzip ];
 
 script = ( pkgs.writeScriptBin name (
     builtins.readFile "${src}/src/xnode-personaliser.sh"
