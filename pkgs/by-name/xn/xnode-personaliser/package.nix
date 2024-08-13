@@ -11,8 +11,8 @@ version = "v0.0.0-0xnodepkgs0";
 src = pkgs.fetchFromGitHub {
   owner = "Openmesh-Network";
   repo = name;
-  rev = "a0aca399f3ca0791cbf109bd05e5a1af5bb39ab5";
-  sha256 = "0a7bn703dsby4l4fprsy0a73jzf3cbi2iskrxjcj62gii92x6f8q";
+  rev = "8bfeeb69d3e9057130ba1ec728f7db02a741f8af";
+  sha256 = "0avr8n6y39b9swr9isd6psyjhb8i5m4mxif51ygmyxfkw0cc1n54";
 };
 
 inputs = with pkgs; [ jq curl gnugrep gzip ];
