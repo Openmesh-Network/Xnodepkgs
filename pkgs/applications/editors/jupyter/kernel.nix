@@ -4,19 +4,26 @@ let
 
   default = {
     python3 = let
-      env = (python3.withPackages (ps: with ps; [ ipykernel ]));
+      env = python3.withPackages (pythonPackages: with pythonPackages; [
+        # Provide standard data science tools by default
+        ipykernel
+        numpy
+        pandas
+        matplotlib
+        scikit-learn
+      ]);
     in {
       displayName = "Python 3";
       argv = [
-        env.interpreter
+        "${env.interpreter}"
         "-m"
         "ipykernel_launcher"
         "-f"
         "{connection_file}"
       ];
       language = "python";
-      logo32 = "${env}/${env.sitePackages}/ipykernel/resources/logo-32x32.png";
-      logo64 = "${env}/${env.sitePackages}/ipykernel/resources/logo-64x64.png";
+      logo32 = lib.mkIf (env.sitePackages != null) (builtins.toPath "/${env.sitePackages}/ipykernel/resources/logo-32x32.png");
+      logo64 = lib.mkIf (env.sitePackages != null) (builtins.toPath "/${env.sitePackages}/ipykernel/resources/logo-64x64.png");
     };
   };
 
