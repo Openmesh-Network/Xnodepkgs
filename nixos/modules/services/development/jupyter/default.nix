@@ -17,7 +17,7 @@ let
   notebookConfig = pkgs.writeText "jupyter_config.py" ''
     ${cfg.notebookConfig}
 
-    c.NotebookApp.password = ${cfg.password}
+    ${if cfg.usePassword then "c.NotebookApp.password = ${cfg.password}" else ""}
   '';
 
 in {
@@ -37,7 +37,7 @@ in {
     # NOTE: We don't use top-level jupyter because we don't
     # want to pass in JUPYTER_PATH but use .environment instead,
     # saving a rebuild.
-    package = mkPackageOption pkgs [ "python3" "pkgs" "notebook" ] { };
+    package = mkPackageOption pkgs [ "python3" "pkgs" "notebook" "jupyterlab" ] { };
 
     command = mkOption {
       type = types.str;
@@ -86,10 +86,19 @@ in {
       example = "users";
     };
 
+    usePassword = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to use a password for the notebook.
+      '';
+    };
+
     password = mkOption {
       type = types.str;
+      default = "''";
       description = ''
-        Password to use with notebook.
+        Password to use with the notebook. This option is only used if `usePassword` is set to true.
         Can be generated using:
           In [1]: from notebook.auth import passwd
           In [2]: passwd('test')
