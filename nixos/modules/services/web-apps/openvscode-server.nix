@@ -152,6 +152,13 @@ in
         type = lib.types.nullOr lib.types.str;
       };
 
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Whether to open ports in the firewall for this application.
+        '';
+      };
     };
   };
 
@@ -207,6 +214,10 @@ in
     ];
 
     users.groups."${defaultGroup}" = lib.mkIf (cfg.group == defaultGroup) { };
+
+    networking.firewall = lib.mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.port ];
+    };
   };
 
   meta.maintainers = [ lib.maintainers.drupol ];
