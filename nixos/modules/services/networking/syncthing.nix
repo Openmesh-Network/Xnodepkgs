@@ -601,6 +601,14 @@ in {
       };
 
       package = mkPackageOption pkgs "syncthing" { };
+
+      openFirewall = mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Whether to open ports in the firewall for the gui of this application.
+        '';
+      };
     };
   };
 
@@ -621,9 +629,13 @@ in {
 
   config = mkIf cfg.enable {
 
-    networking.firewall = mkIf cfg.openDefaultPorts {
-      allowedTCPPorts = [ 22000 ];
-      allowedUDPPorts = [ 21027 22000 ];
+    # networking.firewall = mkIf cfg.openDefaultPorts {
+    #   allowedTCPPorts = [ 22000 ];
+    #   allowedUDPPorts = [ 21027 22000 ];
+    # };
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ 8384 ];
     };
 
     systemd.packages = [ pkgs.syncthing ];
