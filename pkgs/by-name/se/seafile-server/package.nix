@@ -67,7 +67,6 @@ stdenv.mkDerivation {
     vala
     libevhtp
     oniguruma
-    libargon2
   ];
 
   postInstall = ''
