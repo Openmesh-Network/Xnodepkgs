@@ -100,8 +100,15 @@ in
           A file containing MongoDB statements to execute on first startup.
         '';
       };
-    };
 
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Whether to open ports in the firewall for this application.
+        '';
+      };
+    };
   };
 
 
@@ -185,6 +192,9 @@ in
         '';
       };
 
+    networking.firewall = lib.mkIf cfg.openFirewall {
+      allowedTCPPorts = [ 27018 ];
+    };
   };
 
 }
