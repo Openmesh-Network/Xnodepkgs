@@ -100,14 +100,6 @@ in
         description = "MongoDB extra configuration in YAML format";
       };
 
-      initialScript = mkOption {
-        type = types.nullOr types.path;
-        default = null;
-        description = ''
-          A file containing MongoDB statements to execute on first startup.
-        '';
-      };
-
       openFirewall = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -165,37 +157,8 @@ in
           if ! test -e ${cfg.pidFile}; then
               install -D -o ${cfg.user} /dev/null ${cfg.pidFile}
           fi '' + lib.optionalString cfg.enableAuth ''
-
-          if ! test -e "${cfg.dbpath}/.auth_setup_complete"; then
-            systemd-run --unit=mongodb-for-setup --uid=${cfg.user} ${mongodb}/bin/mongod --config ${mongoCnf cfg_}
-            # wait for mongodb
-            while ! ${mongodb}/bin/mongo --eval "db.version()" > /dev/null 2>&1; do sleep 0.1; done
-
-          ${mongodb}/bin/mongo <<EOF
-            use admin
-            db.createUser(
-              {
-                user: "root",
-                pwd: "${cfg.initialRootPassword}",
-                roles: [
-                  { role: "userAdminAnyDatabase", db: "admin" },
-                  { role: "dbAdminAnyDatabase", db: "admin" },
-                  { role: "readWriteAnyDatabase", db: "admin" }
-                ]
-              }
-            )
-          EOF
-            touch "${cfg.dbpath}/.auth_setup_complete"
-            systemctl stop mongodb-for-setup
-          fi
         '';
         postStart = ''
-            if test -e "${cfg.dbpath}/.first_startup"; then
-              ${optionalString (cfg.initialScript != null) ''
-                ${mongodb}/bin/mongo ${optionalString (cfg.enableAuth) "-u root -p ${cfg.initialRootPassword}"} admin "${cfg.initialScript}"
-              ''}
-              rm -f "${cfg.dbpath}/.first_startup"
-            fi
         '';
       };
 
