@@ -11,6 +11,7 @@ let
   mongoCnf = cfg: pkgs.writeText "mongodb.conf"
   ''
     net.bindIp: ${cfg.bind_ip}
+    net.bindIpAll: ${cfg.bind_ip_all}
     ${optionalString cfg.quiet "systemLog.quiet: true"}
     systemLog.destination: syslog
     storage.dbPath: ${cfg.dbpath}
@@ -43,6 +44,12 @@ in
         type = types.str;
         default = "127.0.0.1";
         description = "IP to bind to";
+      };
+
+      bind_ip_all = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Allow connections from any ip.";
       };
 
       quiet = mkOption {
