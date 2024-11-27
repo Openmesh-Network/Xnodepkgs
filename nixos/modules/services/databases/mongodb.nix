@@ -193,7 +193,7 @@ in
       };
 
     networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 27018 ];
+      allowedTCPPorts = [ 27017 ];
     };
   };
 
