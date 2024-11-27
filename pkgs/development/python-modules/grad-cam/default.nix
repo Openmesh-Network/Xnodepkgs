@@ -3,11 +3,10 @@
   buildPythonPackage,
   pythonOlder,
   fetchPypi,
-  pythonRelaxDepsHook,
   setuptools,
   matplotlib,
   numpy,
-  opencv4,
+  opencv-python,
   pillow,
   scikit-learn,
   torch,
@@ -18,23 +17,17 @@
 
 buildPythonPackage rec {
   pname = "grad-cam";
-  version = "1.5.2";
+  version = "1.5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WhC3QjMDh4E8NnO8SyCtg9rFgDJkYP6/xdWNcTvlKFU=";
+    hash = "sha256-q9PcG836Az+2o1XqeKNh0+z9GN9UGinmGyOAhD5B3Zw=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt\
-      --replace "opencv-python" "opencv"
-  '';
-
   nativeBuildInputs = [
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -48,7 +41,7 @@ buildPythonPackage rec {
   dependencies = [
     matplotlib
     numpy
-    opencv4
+    opencv-python
     pillow
     scikit-learn
     torchvision

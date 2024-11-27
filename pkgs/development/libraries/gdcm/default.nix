@@ -10,7 +10,7 @@
 , libiconv
 , enablePython ? false
 , python ? null
-, swig4
+, swig
 , expat
 , libuuid
 , openjpeg
@@ -45,13 +45,13 @@ stdenv.mkDerivation rec {
     "-DGDCM_USE_VTK=ON"
   ] ++ lib.optionals enablePython [
     "-DGDCM_WRAP_PYTHON:BOOL=ON"
-    "-DGDCM_INSTALL_PYTHONMODULE_DIR=${placeholder "out"}/${python.sitePackages}"
+    "-DGDCM_INSTALL_PYTHONMODULE_DIR=${placeholder "out"}/${python.sitePackages}/python_gdcm"
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optional stdenv.isDarwin DarwinTools;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin DarwinTools;
 
   buildInputs = [
     expat
@@ -60,11 +60,18 @@ stdenv.mkDerivation rec {
     zlib
   ] ++ lib.optionals enableVTK [
     vtk
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ApplicationServices
     Cocoa
     libiconv
-  ] ++ lib.optionals enablePython [ swig4 python ];
+  ] ++ lib.optionals enablePython [ swig python ];
+
+  postInstall = lib.optionalString enablePython ''
+    substitute \
+      ${./python_gdcm.egg-info} \
+      $out/${python.sitePackages}/python_gdcm-${version}.egg-info \
+      --subst-var-by GDCM_VER "${version}"
+  '';
 
   disabledTests = [
     # require networking:
@@ -72,12 +79,14 @@ stdenv.mkDerivation rec {
     "TestFind"
     "gdcmscu-echo-dicomserver"
     "gdcmscu-find-dicomserver"
-    # seemingly ought to be be disabled when the test data submodule is not present:
+    # seemingly ought to be disabled when the test data submodule is not present:
     "TestvtkGDCMImageReader2_3"
     "TestSCUValidation"
     # errors because 3 classes not wrapped:
     "TestWrapPython"
-  ] ++ lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
+    # AttributeError: module 'gdcm' has no attribute 'UIDGenerator_SetRoot'; maybe a wrapping regression:
+    "TestUIDGeneratorPython"
+  ] ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
     "TestRescaler2"
   ];
 
