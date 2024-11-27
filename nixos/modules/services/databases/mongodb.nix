@@ -11,7 +11,7 @@ let
   mongoCnf = cfg: pkgs.writeText "mongodb.conf"
   ''
     net.bindIp: ${cfg.bind_ip}
-    net.bindIpAll: ${cfg.bind_ip_all}
+    ${optionalString cfg.bind_ip_all "net.bindIpAll: true"}
     ${optionalString cfg.quiet "systemLog.quiet: true"}
     systemLog.destination: syslog
     storage.dbPath: ${cfg.dbpath}
